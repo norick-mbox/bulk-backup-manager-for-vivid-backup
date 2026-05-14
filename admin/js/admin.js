@@ -1,0 +1,218 @@
+jQuery(function ($) {
+  
+  'use strict';
+  
+  /**
+   * Toggle upload area.
+   */
+
+  /**
+ * Move toolbar into WPvivid area.
+ */
+  function bbmwpvMoveToolbar() {
+
+    let toolbar = $('#bbmwpv-toolbar');
+
+    if (!toolbar.length) {
+      return;
+    }
+
+    let target = $('#poststuff');
+
+    if (!target.length) {
+      return;
+    }
+
+    target.after(toolbar);
+
+    toolbar.show();
+
+    toolbar.css({
+      margin: '15px 0'
+    });
+  }
+
+  setTimeout(
+    bbmwpvMoveToolbar,
+    500
+  );
+
+  
+  $(document).on('click', '#bbmwpv-bulk-upload-open', function () {
+
+    $('#bbmwpv-upload-area').slideToggle(150);
+  });
+
+  /**
+   * Bulk download.
+   */
+  $(document).on('click', '#bbmwpv-bulk-download', function () {
+
+    let files = [];
+
+    $('input[name="check_backup"]:checked').each(function () {
+
+      let row = $(this).closest('tr');
+
+      let downloadText = row.find(
+        '[onclick*="wpvivid_initialize_download"]'
+      ).text();
+
+      let match = downloadText.match(/\((.*?)\)/);
+
+      if (match && match[1]) {
+
+        let sizeText = match[1];
+
+        console.log(sizeText);
+      }
+
+      let backupId = $(this).val();
+
+      if (backupId) {
+        files.push(backupId);
+      }
+    });
+
+    if (!files.length) {
+
+      alert('Please select backup files.');
+
+      return;
+    }
+
+    let button = $(this);
+
+    button.prop('disabled', true);
+
+    $.ajax({
+
+      url: bbmwpv.ajax_url,
+      type: 'POST',
+
+      data: {
+        action: 'bbmwpv_bulk_download',
+        nonce: bbmwpv.nonce,
+        files: files
+      },
+
+      success: function (response) {
+
+        button.prop('disabled', false);
+
+        if (!response.success) {
+
+          alert(response.data.message || 'Download failed.');
+
+          return;
+        }
+
+        if (response.data.url) {
+
+          window.location.href = response.data.url;
+        }
+      },
+
+      error: function () {
+
+        button.prop('disabled', false);
+
+        alert('Ajax request failed.');
+      }
+    });
+  });
+
+  /**
+   * Upload backup bundle.
+   */
+  $(document).on('submit', '#bbmwpv-upload-form', function (e) {
+
+    e.preventDefault();
+
+    let formData = new FormData();
+
+    let fileInput = $('#bbmwpv-upload-file')[0];
+
+    if (!fileInput.files.length) {
+
+      alert('Please select ZIP file.');
+
+      return;
+    }
+
+    formData.append(
+      'action',
+      'bbmwpv_bulk_upload'
+    );
+
+    formData.append(
+      'nonce',
+      bbmwpv.nonce
+    );
+
+    formData.append(
+      'file',
+      fileInput.files[0]
+    );
+
+    let status = $('#bbmwpv-upload-result');
+
+    status.html('<p>Uploading...</p>');
+
+    $.ajax({
+
+      url: bbmwpv.ajax_url,
+      type: 'POST',
+      data: formData,
+
+      processData: false,
+      contentType: false,
+
+      success: function (response) {
+
+        if (!response.success) {
+
+          status.html(
+            '<div class="notice notice-error"><p>' +
+            response.data.message +
+            '</p></div>'
+          );
+
+          return;
+        }
+
+        let html =
+          '<div class="notice notice-success">' +
+          '<p>' +
+          response.data.message +
+          '</p>';
+
+        if (response.data.imported) {
+
+          html += '<ul>';
+
+          response.data.imported.forEach(function (file) {
+
+            html += '<li>' + file + '</li>';
+          });
+
+          html += '</ul>';
+        }
+
+        html += '</div>';
+
+        status.html(html);
+      },
+
+      error: function () {
+
+        status.html(
+          '<div class="notice notice-error">' +
+          '<p>Upload failed.</p>' +
+          '</div>'
+        );
+      }
+    });
+  });
+
+});

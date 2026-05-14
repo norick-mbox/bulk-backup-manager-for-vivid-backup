@@ -1,0 +1,82 @@
+#bbmwpv-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+#bbmwpv-upload-area {
+  background: #fff;
+  border: 1px solid #ccd0d4;
+  padding: 15px;
+  border-radius: 4px;
+  max-width: 700px;
+}
+
+#bbmwpv-upload-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#bbmwpv-upload-result {
+  margin-top: 15px;
+}
+
+.bbmwpv-checkbox-column {
+  width: 40px;
+  text-align: center;
+}
+
+.bbmwpv-upload-wrapper {
+  background: #fff;
+  border: 1px solid #ccd0d4;
+  padding: 20px;
+  border-radius: 4px;
+  margin-top: 20px;
+  max-width: 700px;
+}
+
+.bbmwpv-upload-wrapper h3 {
+  margin-top: 0;
+}
+
+.bbmwpv-upload-file-info {
+  background: #f6f7f7;
+  border: 1px solid #dcdcde;
+  padding: 12px;
+  border-radius: 4px;
+  line-height: 1.6;
+}
+
+#bbmwpv-upload-status {
+  margin-top: 15px;
+}
+
+.notice ul {
+  margin: 10px 0 0 20px;
+  list-style: disc;
+}
+
+.notice ul li {
+  margin-bottom: 4px;
+}
+
+#bbmwpv-bulk-download[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media screen and (max-width: 782px) {
+
+  #bbmwpv-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #bbmwpv-upload-form {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
