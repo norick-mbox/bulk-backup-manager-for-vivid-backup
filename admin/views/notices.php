@@ -2,7 +2,7 @@
     /**
  * Admin notices view.
  *
- * @package BulkBackupManagerForWPvivid
+ * @package BulkBackupManagerForVividBackup
  */
 
     if (!defined('ABSPATH')) {
@@ -12,54 +12,65 @@
     /**
  * Expected variables:
  *
- * @var string $type    success|error|warning|info
- * @var string $message Notice message.
+ * @var string $bbmwpv_type    success|error|warning|info
+ * @var string $bbmwpv_message Notice message.
  */
 
-    $type = isset($type) ? sanitize_html_class($type) : 'info';
-    $message = isset($message) ? wp_kses_post($message) : '';
+    $bbmwpv_type = isset($bbmwpv_type)
+    ? sanitize_html_class($bbmwpv_type)
+    : 'info';
 
-    if (empty($message)) {
+    $bbmwpv_message = isset($bbmwpv_message)
+    ? wp_kses_post($bbmwpv_message)
+    : '';
+
+    if (empty($bbmwpv_message)) {
     return;
     }
 
-    $allowed_types = array(
+    $bbmwpv_allowed_types = array(
     'success',
     'error',
     'warning',
     'info',
     );
 
-    if (!in_array($type, $allowed_types, true)) {
-    $type = 'info';
+    if (
+    !in_array(
+        $bbmwpv_type,
+        $bbmwpv_allowed_types,
+        true
+    )
+    ) {
+    $bbmwpv_type = 'info';
     }
 
-    $notice_class = 'notice';
+    $bbmwpv_notice_class = 'notice';
 
-    switch ($type) {
+    switch ($bbmwpv_type) {
 
     case 'success':
-        $notice_class .= ' notice-success';
+        $bbmwpv_notice_class .= ' notice-success';
         break;
 
     case 'error':
-        $notice_class .= ' notice-error';
+        $bbmwpv_notice_class .= ' notice-error';
         break;
 
     case 'warning':
-        $notice_class .= ' notice-warning';
+        $bbmwpv_notice_class .= ' notice-warning';
         break;
 
     default:
-        $notice_class .= ' notice-info';
+        $bbmwpv_notice_class .= ' notice-info';
         break;
     }
 ?>
 
-<div class="<?php echo esc_attr($notice_class); ?> is-dismissible">
+<div class="<?php echo esc_attr($bbmwpv_notice_class); ?> is-dismissible">
 
 	<p>
-		<?php echo wp_kses_post($message); ?>
+		<?php echo wp_kses_post($bbmwpv_message); ?>
 	</p>
 
 </div>

@@ -16,7 +16,7 @@
 		<?php
             echo esc_html__(
                 'Import Backup Bundle',
-                'bulk-backup-manager-for-wpvivid'
+                'bulk-backup-manager-for-vivid-backup'
             );
         ?>
 	</h3>
@@ -25,7 +25,7 @@
 		<?php
             echo esc_html__(
                 'Upload a ZIP file that contains multiple WPvivid backup ZIP files.',
-                'bulk-backup-manager-for-wpvivid'
+                'bulk-backup-manager-for-vivid-backup'
             );
         ?>
 	</p>
@@ -51,7 +51,7 @@
 			<?php
                 echo esc_html__(
                     'Start Import',
-                    'bulk-backup-manager-for-wpvivid'
+                    'bulk-backup-manager-for-vivid-backup'
                 );
             ?>
 		</button>

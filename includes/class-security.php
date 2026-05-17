@@ -98,13 +98,12 @@ class BBMWPV_Security
             return;
         }
 
-        $content = <<<HTACCESS
-Options -Indexes
+        $content =
+    "Options -Indexes\n\n" .
+    "<FilesMatch \"\\.(zip|gz|tar)$\">\n" .
+    "    Require all denied\n" .
+    "</FilesMatch>\n";
 
-<FilesMatch "\.(zip|gz|tar)$">
-    Require all denied
-</FilesMatch>
-HTACCESS;
 
         wp_filesystem();
 

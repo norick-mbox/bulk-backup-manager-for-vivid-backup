@@ -22,15 +22,16 @@ delete_option('bbmwpv_version');
 
 if (is_multisite()) {
 
-    $sites = get_sites(
+    $bbmwpv_sites = get_sites(
         array(
             'fields' => 'ids',
         )
     );
 
-    foreach ($sites as $site_id) {
+   foreach ($bbmwpv_sites as $bbmwpv_site_id) {
 
-        switch_to_blog($site_id);
+        switch_to_blog($bbmwpv_site_id);
+
 
         delete_option('bbmwpv_settings');
         delete_option('bbmwpv_version');

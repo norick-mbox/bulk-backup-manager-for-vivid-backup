@@ -1,11 +1,11 @@
-bulk-backup-manager-for-wpvivid/
+bulk-backup-manager-for-vivid-backup/
 │
-├─ bulk-backup-manager-for-wpvivid.php
+├─ bulk-backup-manager-for-vivid-backup.php
 ├─ readme.txt
 ├─ uninstall.php
 │
 ├─ languages/
-│   └─ bulk-backup-manager-for-wpvivid.pot
+│   └─ bulk-backup-manager-for-vivid-backup.pot
 │
 ├─ assets/
 │   ├─ banner-772x250.png

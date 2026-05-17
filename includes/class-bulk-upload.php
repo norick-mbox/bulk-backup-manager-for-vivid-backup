@@ -38,7 +38,7 @@ class BBMWPV_Bulk_Upload
 
             wp_send_json_error(
                 array(
-                    'message' => __('Permission denied.', 'bulk-backup-manager-for-wpvivid'),
+                    'message' => __('Permission denied.', 'bulk-backup-manager-for-vivid-backup'),
                 ),
                 403
             );
@@ -46,11 +46,19 @@ class BBMWPV_Bulk_Upload
 
         check_ajax_referer('bbmwpv_nonce', 'nonce');
 
-        if (empty($_FILES['file'])) {
+        $bbmwpv_uploaded_file =
+        isset($_FILES['file'])
+        ? wp_unslash($_FILES['file'])
+        : array();
+
+        if (
+            empty($bbmwpv_uploaded_file) ||
+            empty($bbmwpv_uploaded_file['name'])
+        ) {
 
             wp_send_json_error(
                 array(
-                    'message' => __('No file uploaded.', 'bulk-backup-manager-for-wpvivid'),
+                    'message' => __('No file uploaded.', 'bulk-backup-manager-for-vivid-backup'),
                 ),
                 400
             );
@@ -58,7 +66,7 @@ class BBMWPV_Bulk_Upload
 
         require_once ABSPATH . 'wp-admin/includes/file.php';
 
-        $uploaded_file = $_FILES['file'];
+        $uploaded_file = wp_unslash($_FILES['file']);
 
         $overrides = array(
             'test_form' => false,
@@ -93,7 +101,7 @@ class BBMWPV_Bulk_Upload
 
             wp_send_json_error(
                 array(
-                    'message' => __('Failed to open ZIP file.', 'bulk-backup-manager-for-wpvivid'),
+                    'message' => __('Failed to open ZIP file.', 'bulk-backup-manager-for-vivid-backup'),
                 ),
                 500
             );
@@ -108,7 +116,7 @@ class BBMWPV_Bulk_Upload
 
             wp_send_json_error(
                 array(
-                    'message' => __('Too many files in ZIP archive.', 'bulk-backup-manager-for-wpvivid'),
+                    'message' => __('Too many files in ZIP archive.', 'bulk-backup-manager-for-vivid-backup'),
                 ),
                 400
             );
@@ -164,7 +172,7 @@ class BBMWPV_Bulk_Upload
 
         wp_send_json_success(
             array(
-                'message' => __('Backup files imported successfully.', 'bulk-backup-manager-for-wpvivid'),
+                'message' => __('Backup files imported successfully.', 'bulk-backup-manager-for-vivid-backup'),
                 'imported' => $imported,
             )
         );

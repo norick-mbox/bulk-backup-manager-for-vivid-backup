@@ -144,6 +144,14 @@ class BBMWPV_Zip_Handler
             }
         }
 
-        rmdir($dir);
+        global $wp_filesystem;
+
+        WP_Filesystem();
+
+        $wp_filesystem->rmdir(
+            $dir,
+            true
+        );
+
     }
 }

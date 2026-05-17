@@ -1,16 +1,16 @@
 <?php
     /**
- * Plugin Name: Bulk Backup Manager for WPvivid
- * Plugin URI: https://example.com/
+ * Plugin Name: Bulk Backup Manager for Vivid Backup
+ * Plugin URI: https://github.com/norick-mbox/bulk-backup-manager-for-vivid-backup.git
  * Description: Bulk download and upload manager for WPvivid Backup Plugin.
  * Version: 0.1.0
  * Author: Norick Saeki
  * Author URI: https://norick-mbox.com/
- * Text Domain: bulk-backup-manager-for-wpvivid
+ * Text Domain: bulk-backup-manager-for-vivid-backup
  * Domain Path: /languages
  * Requires at least: 6.0
  * Requires PHP: 7.4
- * Tested up to: 6.8
+ * Tested up to: 6.9
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -72,7 +72,7 @@
 			<?php
                 echo esc_html__(
                         'Bulk Backup Manager for WPvivid requires WPvivid Backup Plugin to be installed and activated.',
-                        'bulk-backup-manager-for-wpvivid'
+                        'bulk-backup-manager-for-vivid-backup'
                     );
                 ?>
 		</p>
@@ -81,21 +81,6 @@
         }
         add_action('admin_notices', 'bbmwpv_wpvivid_missing_notice');
 
-        /**
-         * Load plugin textdomain.
-         *
-         * @return void
-         */
-        function bbmwpv_load_textdomain()
-        {
-
-            load_plugin_textdomain(
-        'bulk-backup-manager-for-wpvivid',
-        false,
-        dirname(BBMWPV_PLUGIN_BASENAME) . '/languages'
-            );
-        }
-        add_action('plugins_loaded', 'bbmwpv_load_textdomain');
 
         /**
          * Load plugin files.
