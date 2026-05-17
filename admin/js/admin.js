@@ -64,7 +64,7 @@ jQuery(function ($) {
 
         let sizeText = match[1];
 
-        console.log(sizeText);
+        // console.log(sizeText);
       }
 
       let backupId = $(this).val();
@@ -82,6 +82,39 @@ jQuery(function ($) {
     }
 
     let button = $(this);
+    let progress = $('#bbmwpv-progress');
+
+    if (!progress.length) {
+
+      $('#bbmwpv-toolbar').after(
+
+        '<div id="bbmwpv-progress" style="margin:15px 0;max-width:400px;">' +
+
+        '<div style="' +
+        'background:#dcdcde;' +
+        'height:18px;' +
+        'border-radius:9px;' +
+        'overflow:hidden;' +
+        '">' +
+
+        '<div id="bbmwpv-progress-bar" style="' +
+        'width:5%;' +
+        'height:18px;' +
+        'background:#2271b1;' +
+        'transition:width .3s ease;' +
+        '"></div>' +
+
+        '</div>' +
+
+        '<p id="bbmwpv-progress-text" style="margin-top:8px;">' +
+        'Creating ZIP bundle...' +
+        '</p>' +
+
+        '</div>'
+      );
+    }
+
+    $('#bbmwpv-progress-bar').css('width', '30%');
 
     button.prop('disabled', true);
 
@@ -109,13 +142,47 @@ jQuery(function ($) {
 
         if (response.data.url) {
 
-          window.location.href = response.data.url;
+          $('#bbmwpv-progress-bar').css(
+            'width',
+            '100%'
+          );
+
+          $('#bbmwpv-progress-text').text(
+            'Download starting...'
+          );
+
+          setTimeout(function () {
+
+            window.location.href =
+              response.data.url;
+
+          }, 300);
+
+          /**
+           * Remove progress UI.
+           */
+          setTimeout(function () {
+
+            $('#bbmwpv-progress').fadeOut(
+              300,
+              function () {
+                $(this).remove();
+              }
+            );
+
+          }, 5000);
         }
       },
 
-      error: function () {
+      error: function (xhr) {
 
         button.prop('disabled', false);
+
+        console.log(xhr);
+
+        $('#bbmwpv-progress-text').text(
+          'Download failed.'
+        );
 
         alert('Ajax request failed.');
       }

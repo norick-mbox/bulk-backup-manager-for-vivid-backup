@@ -29,6 +29,7 @@
 		type="button"
 		class="button"
 		id="bbmwpv-bulk-upload-open"
+		disabled
 	>
 		<?php
             echo esc_html__(
