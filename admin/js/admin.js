@@ -122,6 +122,7 @@ jQuery(function ($) {
 
       url: bbmwpv.ajax_url,
       type: 'POST',
+      timeout: 0,
 
       data: {
         action: 'bbmwpv_bulk_download',

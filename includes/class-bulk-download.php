@@ -33,6 +33,9 @@ class BBMWPV_Bulk_Download
      */
     public function handle_bulk_download()
     {
+     @set_time_limit(0);
+     @ini_set('memory_limit', '-1');
+
 
         if (!current_user_can('manage_options')) {
 
