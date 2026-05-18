@@ -21,8 +21,8 @@ class BBMWPV_Bulk_Download
         );
 
         add_action(
-            'admin_post_bbmwpv_download_bundle',
-            array($this, 'download_bundle')
+            'bbmwpv_cleanup_zip',
+            array($this, 'cleanup_zip')
         );
     }
 
@@ -33,9 +33,12 @@ class BBMWPV_Bulk_Download
      */
     public function handle_bulk_download()
     {
-     @set_time_limit(0);
-     @ini_set('memory_limit', '-1');
 
+        @set_time_limit(0);
+
+        @ini_set('memory_limit', '-1');
+
+        $this->cleanup_old_files();
 
         if (!current_user_can('manage_options')) {
 
@@ -52,7 +55,10 @@ class BBMWPV_Bulk_Download
         );
 
         $backup_ids = isset($_POST['files'])
-        ? array_map('sanitize_text_field', (array) wp_unslash($_POST['files']))
+        ? array_map(
+            'sanitize_text_field',
+            (array) wp_unslash($_POST['files'])
+        )
         : array();
 
         if (empty($backup_ids)) {
@@ -64,13 +70,15 @@ class BBMWPV_Bulk_Download
             );
         }
 
-        $backup_dir = WP_CONTENT_DIR . '/wpvividbackups';
+        $backup_dir =
+            WP_CONTENT_DIR . '/wpvividbackups';
 
         if (!is_dir($backup_dir)) {
 
             wp_send_json_error(
                 array(
-                    'message' => 'Backup directory not found.',
+                    'message' =>
+                    'Backup directory not found.',
                 )
             );
         }
@@ -81,7 +89,8 @@ class BBMWPV_Bulk_Download
 
             wp_send_json_error(
                 array(
-                    'message' => 'Failed to scan backup directory.',
+                    'message' =>
+                    'Failed to scan backup directory.',
                 )
             );
         }
@@ -90,13 +99,21 @@ class BBMWPV_Bulk_Download
 
         foreach ($all_files as $file) {
 
-            if ('.' === $file || '..' === $file) {
+            if (
+                '.' === $file ||
+                '..' === $file
+            ) {
                 continue;
             }
 
             foreach ($backup_ids as $backup_id) {
 
-                if (false !== strpos($file, $backup_id)) {
+                if (
+                    false !== strpos(
+                        $file,
+                        $backup_id
+                    )
+                ) {
 
                     $matched_files[] = $file;
 
@@ -109,7 +126,8 @@ class BBMWPV_Bulk_Download
 
             wp_send_json_error(
                 array(
-                    'message' => 'No matching backup files found.',
+                    'message' =>
+                    'No matching backup files found.',
                 )
             );
         }
@@ -118,25 +136,26 @@ class BBMWPV_Bulk_Download
 
             wp_send_json_error(
                 array(
-                    'message' => 'ZipArchive is not available.',
+                    'message' =>
+                    'ZipArchive is not available.',
                 )
             );
         }
 
         $site_url = home_url();
 
-/**
- * Remove protocol.
- */
+        /**
+         * Remove protocol.
+         */
         $site_url = preg_replace(
             '#^https?://#',
             '',
             $site_url
         );
 
-/**
- * Convert unsafe filename chars.
- */
+        /**
+         * Convert unsafe filename chars.
+         */
         $site_url = str_replace(
             array(
                 '/',
@@ -147,21 +166,13 @@ class BBMWPV_Bulk_Download
                 '=',
                 '.',
             ),
-            array(
-                '-',
-                '-',
-                '-',
-                '-',
-                '-',
-                '-',
-                '-',
-            ),
+            '-',
             $site_url
         );
 
-/**
- * Cleanup duplicate dashes.
- */
+        /**
+         * Cleanup duplicate dashes.
+         */
         $site_url = preg_replace(
             '/-+/',
             '-',
@@ -183,69 +194,71 @@ class BBMWPV_Bulk_Download
             $date .
             '.zip';
 
-        $temp_file = wp_tempnam(
-            $zip_filename
-        );
+        /**
+         * Download directory.
+         */
+        $upload_dir = wp_upload_dir();
 
-        if (false === $temp_file) {
+        $bbmwpv_download_dir =
+            trailingslashit(
+            $upload_dir['basedir']
+        ) . 'bbmwpv-downloads';
 
-            wp_send_json_error(
-                array(
-                    'message' => 'Failed to create temporary file.',
-                )
+        if (
+            !file_exists(
+                $bbmwpv_download_dir
+            )
+        ) {
+
+            wp_mkdir_p(
+                $bbmwpv_download_dir
             );
         }
 
-/**
- * Rename temp file.
- */
+        /**
+         * Protect directory listing.
+         */
+        $htaccess =
+            $bbmwpv_download_dir .
+            '/.htaccess';
+
+        if (!file_exists($htaccess)) {
+
+            file_put_contents(
+                $htaccess,
+                "Options -Indexes\n"
+            );
+        }
+
         $zip_path =
-            dirname($temp_file) .
-            '/' .
-            $zip_filename;
-
-        global $wp_filesystem;
-
-        WP_Filesystem();
-
-        $wp_filesystem->move(
-            $temp_file,
-            $zip_path,
-            true
-        );
-
-        if (!file_exists($zip_path)) {
-
-            wp_send_json_error(
-                array(
-                    'message' => 'Failed to move ZIP file.',
-                )
-            );
-        }
-
-        if (false === $zip_path) {
-
-            wp_send_json_error(
-                array(
-                    'message' => 'Failed to create temporary file.',
-                )
-            );
-        }
+            trailingslashit(
+            $bbmwpv_download_dir
+        ) . $zip_filename;
 
         $zip = new ZipArchive();
 
-        if (true !== $zip->open($zip_path, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
+        if (
+            true !== $zip->open(
+                $zip_path,
+                ZipArchive::CREATE |
+                ZipArchive::OVERWRITE
+            )
+        ) {
 
             wp_send_json_error(
                 array(
-                    'message' => 'Failed to create ZIP archive.',
+                    'message' =>
+                    'Failed to create ZIP archive.',
                 )
             );
         }
 
         foreach ($matched_files as $file) {
 
-            $file_path = trailingslashit($backup_dir) . $file;
+            $file_path =
+                trailingslashit(
+                $backup_dir
+            ) . $file;
 
             if (file_exists($file_path)) {
 
@@ -253,110 +266,131 @@ class BBMWPV_Bulk_Download
                     $file_path,
                     $file
                 );
+
+                /**
+                 * Do not recompress ZIP files.
+                 */
+                $zip->setCompressionName(
+                    $file,
+                    ZipArchive::CM_STORE
+                );
             }
         }
 
-        $zip->close();
+        if (!$zip->close()) {
+
+            wp_send_json_error(
+                array(
+                    'message' =>
+                    'Failed to finalize ZIP archive.',
+                )
+            );
+        }
+
+        if (
+            !file_exists($zip_path) ||
+            filesize($zip_path) < 100
+        ) {
+
+            wp_send_json_error(
+                array(
+                    'message' =>
+                    'Generated ZIP file is invalid.',
+                )
+            );
+        }
 
         /**
-         * Generate download token.
+         * Public download URL.
          */
-        $token = wp_generate_password(32, false);
-
-        set_transient(
-            'bbmwpv_bundle_' . $token,
-            $zip_path,
-            HOUR_IN_SECONDS
+        $download_url =
+        trailingslashit(
+            $upload_dir['baseurl']
+        ) .
+        'bbmwpv-downloads/' .
+        rawurlencode(
+            $zip_filename
         );
 
         /**
-         * Generate secure download URL.
+         * Schedule cleanup.
          */
-        $url = add_query_arg(
-            array(
-                'action' => 'bbmwpv_download_bundle',
-                'token' => rawurlencode($token),
-                'bbmwpv_nonce' => wp_create_nonce(
-                    'bbmwpv_download_bundle'
-                ),
-            ),
-            admin_url('admin-post.php')
+        wp_schedule_single_event(
+            time() + HOUR_IN_SECONDS,
+            'bbmwpv_cleanup_zip',
+            array($zip_path)
         );
 
         wp_send_json_success(
             array(
-                'message' => 'ZIP bundle created.',
-                'url' => $url,
+                'message' =>
+                'ZIP bundle created.',
+                'url' =>
+                $download_url,
             )
         );
-
     }
+
     /**
-     * Download generated bundle.
+     * Cleanup generated ZIP file.
+     *
+     * @param string $zip_path ZIP path.
      *
      * @return void
      */
-    public function download_bundle()
-    {
-
-        if (!current_user_can('manage_options')) {
-            wp_die('Permission denied.');
-        }
-        if (
-            !isset($_GET['bbmwpv_nonce']) ||
-            !wp_verify_nonce(
-                sanitize_text_field(
-                    wp_unslash($_GET['bbmwpv_nonce'])
-                ),
-                'bbmwpv_download_bundle'
-            )
-        ) {
-            wp_die('Invalid nonce.');
-        }
-
-        $token = isset($_GET['token'])
-        ? sanitize_text_field(wp_unslash($_GET['token']))
-        : '';
-
-        if (empty($token)) {
-            wp_die('Invalid token.');
-        }
-
-        $zip_path = get_transient(
-            'bbmwpv_bundle_' . $token
-        );
+    public function cleanup_zip(
+        $zip_path
+    ) {
 
         if (
             empty($zip_path) ||
             !file_exists($zip_path)
         ) {
-            wp_die('Download file not found.');
+            return;
         }
 
-        $filename = basename($zip_path);
-
-        header('Content-Type: application/zip');
-        header(
-            'Content-Disposition: attachment; filename="' .
-            $filename .
-            '"'
-        );
-        header(
-            'Content-Length: ' . filesize($zip_path)
-        );
-
-        header('Pragma: no-cache');
-        header('Expires: 0');
-
-        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- Required for ZIP stream download.
-        readfile($zip_path);
-
         wp_delete_file($zip_path);
+    }
 
-        delete_transient(
-            'bbmwpv_bundle_' . $token
+    /**
+     * Cleanup old ZIP files.
+     *
+     * @return void
+     */
+    private function cleanup_old_files()
+    {
+
+        $upload_dir = wp_upload_dir();
+
+        $dir =
+            trailingslashit(
+            $upload_dir['basedir']
+        ) . 'bbmwpv-downloads';
+
+        if (!file_exists($dir)) {
+            return;
+        }
+
+        $files = glob(
+            $dir . '/*.zip'
         );
 
-        exit;
+        if (empty($files)) {
+            return;
+        }
+
+        foreach ($files as $file) {
+
+            if (
+                filemtime($file) <
+                (
+                    time() -
+                    DAY_IN_SECONDS
+                )
+            ) {
+
+                wp_delete_file($file);
+            }
+        }
     }
 }
