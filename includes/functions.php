@@ -2,7 +2,7 @@
 /**
  * Helper functions.
  *
- * @package BulkBackupManagerForWPvivid
+ * @package NoriviveBackupToolsForVividBackup
  */
 
 if (!defined('ABSPATH')) {

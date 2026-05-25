@@ -2,7 +2,7 @@
 /**
  * Bulk upload class.
  *
- * @package BulkBackupManagerForWPvivid
+ * @package NoriviveBackupToolsForVividBackup
  */
 
 if (!defined('ABSPATH')) {
@@ -38,7 +38,7 @@ class BBMWPV_Bulk_Upload
 
             wp_send_json_error(
                 array(
-                    'message' => __('Permission denied.', 'bulk-backup-manager-for-vivid-backup'),
+                    'message' => __('Permission denied.', 'norivive-backup-tools-for-vivid-backup'),
                 ),
                 403
             );
@@ -58,7 +58,7 @@ class BBMWPV_Bulk_Upload
 
             wp_send_json_error(
                 array(
-                    'message' => __('No file uploaded.', 'bulk-backup-manager-for-vivid-backup'),
+                    'message' => __('No file uploaded.', 'norivive-backup-tools-for-vivid-backup'),
                 ),
                 400
             );
@@ -101,7 +101,7 @@ class BBMWPV_Bulk_Upload
 
             wp_send_json_error(
                 array(
-                    'message' => __('Failed to open ZIP file.', 'bulk-backup-manager-for-vivid-backup'),
+                    'message' => __('Failed to open ZIP file.', 'norivive-backup-tools-for-vivid-backup'),
                 ),
                 500
             );
@@ -116,7 +116,7 @@ class BBMWPV_Bulk_Upload
 
             wp_send_json_error(
                 array(
-                    'message' => __('Too many files in ZIP archive.', 'bulk-backup-manager-for-vivid-backup'),
+                    'message' => __('Too many files in ZIP archive.', 'norivive-backup-tools-for-vivid-backup'),
                 ),
                 400
             );
@@ -172,7 +172,7 @@ class BBMWPV_Bulk_Upload
 
         wp_send_json_success(
             array(
-                'message' => __('Backup files imported successfully.', 'bulk-backup-manager-for-vivid-backup'),
+                'message' => __('Backup files imported successfully.', 'norivive-backup-tools-for-vivid-backup'),
                 'imported' => $imported,
             )
         );

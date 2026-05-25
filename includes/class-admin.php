@@ -2,7 +2,7 @@
 /**
  * Admin class.
  *
- * @package BulkBackupManagerForWPvivid
+ * @package NoriviveBackupToolsForVividBackup
  */
 
 if (!defined('ABSPATH')) {

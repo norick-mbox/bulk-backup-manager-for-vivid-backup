@@ -1,20 +1,20 @@
 <?php
     /**
- * Plugin Name: Bulk Backup Manager for Vivid Backup
- * Plugin URI: https://github.com/norick-mbox/bulk-backup-manager-for-vivid-backup.git
+ * Plugin Name: Norivive Backup Tools for Vivid Backup
+ * Plugin URI: https://github.com/norick-mbox/norivive-backup-tools-for-vivid-backup
  * Description: Bulk download and upload manager for WPvivid Backup Plugin.
- * Version: 0.1.0
+ * Version: 1.0.0
  * Author: Norick Saeki
  * Author URI: https://norick-mbox.com/
- * Text Domain: bulk-backup-manager-for-vivid-backup
+ * Text Domain: norivive-backup-tools-for-vivid-backup
  * Domain Path: /languages
  * Requires at least: 6.0
  * Requires PHP: 7.4
- * Tested up to: 6.9
+ * Tested up to: 7.0
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  *
- * @package BulkBackupManagerForWPvivid
+ * @package NoriviveBackupToolsForVividBackup
  */
 
     if (!defined('ABSPATH')) {
@@ -24,7 +24,7 @@
     /**
  * Plugin version.
  */
-    define('BBMWPV_VERSION', '0.1.0');
+    define('BBMWPV_VERSION', '1.0.0');
 
     /**
  * Plugin path.
@@ -72,7 +72,7 @@
 			<?php
                 echo esc_html__(
                         'Bulk Backup Manager for WPvivid requires WPvivid Backup Plugin to be installed and activated.',
-                        'bulk-backup-manager-for-vivid-backup'
+                        'norivive-backup-tools-for-vivid-backup'
                     );
                 ?>
 		</p>

@@ -2,7 +2,7 @@
     /**
  * Bulk download button view.
  *
- * @package BulkBackupManagerForWPvivid
+ * @package NoriviveBackupToolsForVividBackup
  */
 
     if (!defined('ABSPATH')) {
@@ -20,7 +20,7 @@
 		<?php
             echo esc_html__(
                 'Bulk Download',
-                'bulk-backup-manager-for-vivid-backup'
+                'norivive-backup-tools-for-vivid-backup'
             );
         ?>
 	</button>
@@ -34,7 +34,7 @@
 		<?php
             echo esc_html__(
                 'Bulk Upload',
-                'bulk-backup-manager-for-vivid-backup'
+                'norivive-backup-tools-for-vivid-backup'
             );
         ?>
 	</button>
@@ -62,7 +62,7 @@
 			<?php
                 echo esc_html__(
                     'Upload Backup Bundle',
-                    'bulk-backup-manager-for-vivid-backup'
+                    'norivive-backup-tools-for-vivid-backup'
                 );
             ?>
 		</button>
