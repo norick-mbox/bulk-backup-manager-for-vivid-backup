@@ -1,0 +1,39 @@
+norivive-backup-tools-for-vivid-backup/
+│
+├─ norivive-backup-tools-for-vivid-backup.php
+├─ readme.txt
+├─ uninstall.php
+│
+├─ languages/
+│   └─ norivive-backup-tools-for-vivid-backup.pot
+│
+├─ assets/
+│   ├─ banner-772x250.png
+│   ├─ banner-1544x500.png
+│   ├─ icon-128x128.png
+│   └─ icon-256x256.png
+│
+├─ includes/
+│   ├─ class-plugin.php
+│   ├─ class-admin.php
+│   ├─ class-bulk-download.php
+│   ├─ class-bulk-upload.php
+│   ├─ class-zip-handler.php
+│   ├─ class-security.php
+│   ├─ class-wpvivid-integration.php
+│   └─ functions.php
+│
+├─ admin/
+│   ├─ css/
+│   │   └─ admin.css
+│   │
+│   ├─ js/
+│   │   ├─ admin.js
+│   │   └─ upload.js
+│   │
+│   └─ views/
+│       ├─ bulk-download-button.php
+│       ├─ upload-form.php
+│       └─ notices.php
+│
+└─ vendor/
