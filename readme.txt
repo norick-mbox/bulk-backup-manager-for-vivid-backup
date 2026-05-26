@@ -4,17 +4,17 @@ Tags: backup, wpvivid, migration, restore, download
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Required plugin: WPvivid Backup Plugin
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Bulk download and upload manager for Vivid Backup environments.
+Bulk download and upload tools for WPvivid Backup Plugin.
 WPvivid Backup 環境向けのバックアップバンドル管理プラグインです。
 
 == Description ==
 
-Norivive Backup Tools for Vivid Backup is an independent backup bundle management plugin.
+Norivive Backup Tools for Vivid Backup is an independent bulk backup management add-on for WPvivid Backup Plugin.
 Norivive Backup Tools for Vivid Backup は、独立したバックアップバンドル管理プラグインです。
 
 This plugin allows administrators to:
@@ -144,14 +144,14 @@ The file is generated temporarily and removed immediately after streaming.
 
 == Changelog ==
 
-= 1.0.0 =
+= 1.0.1 =
 
 * Initial release.
   初回リリース
 
 == Upgrade Notice ==
 
-= 1.0.0 =
+= 1.0.1 =
 
 Initial release.
 初回リリース
