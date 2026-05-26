@@ -1,7 +1,7 @@
 jQuery(function ($) {
-  
+
   'use strict';
-  
+
   /**
    * Toggle upload area.
    */
@@ -37,7 +37,7 @@ jQuery(function ($) {
     500
   );
 
-  
+
   $(document).on('click', '#bbmwpv-bulk-upload-open', function () {
 
     $('#bbmwpv-upload-area').slideToggle(150);
@@ -141,38 +141,67 @@ jQuery(function ($) {
           return;
         }
 
-        if (response.data.url) {
-
-          $('#bbmwpv-progress-bar').css(
-            'width',
-            '100%'
-          );
-
-          $('#bbmwpv-progress-text').text(
-            'Download starting...'
-          );
-
-          setTimeout(function () {
-
-            window.location.href =
-              response.data.url;
-
-          }, 300);
-
-          /**
-           * Remove progress UI.
-           */
-          setTimeout(function () {
-
-            $('#bbmwpv-progress').fadeOut(
-              300,
-              function () {
-                $(this).remove();
-              }
-            );
-
-          }, 5000);
+        if (!response.data.url) {
+          return;
         }
+
+        $('#bbmwpv-progress-bar').css(
+          'width',
+          '100%'
+        );
+
+        $('#bbmwpv-progress-text').html(
+
+          'Download should begin automatically.<br><br>' +
+
+          '<div id="bbmwpv-manual-download" style="display:none;">' +
+
+          '<a href="' +
+          response.data.url +
+          '" class="button button-primary" ' +
+          'target="_blank">' +
+
+          'Download ZIP Manually' +
+
+          '</a>' +
+
+          '</div>'
+        );
+
+        /**
+         * Automatic download.
+         */
+        setTimeout(function () {
+
+          window.location.href =
+            response.data.url;
+
+        }, 2000);
+
+        /**
+         * Show manual button only if needed.
+         */
+        setTimeout(function () {
+
+          $('#bbmwpv-manual-download')
+            .fadeIn(200);
+
+        }, 5000);
+
+        /**
+         * Auto close later.
+         */
+        setTimeout(function () {
+
+          $('#bbmwpv-progress').fadeOut(
+            300,
+            function () {
+              $(this).remove();
+            }
+          );
+
+        }, 20000);
+
       },
 
       error: function (xhr) {
